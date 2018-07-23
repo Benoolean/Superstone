@@ -72,7 +72,7 @@ def admin_login():
 
 @templater.route('/admin/insert_stone', methods=['POST', 'GET'])
 def contact_page():
-    form = new_stone_form(request.form)
+    form = new_stone_form()
     if request.method == 'POST':
         if form.validate():
             query_insert = {
