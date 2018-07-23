@@ -1,0 +1,140 @@
+{% extends "template.html" %}
+
+{% block head %}
+<head>
+	<!-- Mobile Specific Meta -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<!-- Favicon-->
+	<!-- Author Meta -->
+	<meta name="author" content="colorlib">
+	<!-- Meta Description -->
+	<meta name="description" content="">
+	<!-- Meta Keyword -->
+	<meta name="keywords" content="">
+	<!-- meta character set -->
+	<meta charset="UTF-8">
+	<!-- Site Title -->
+	<title>Interior</title>
+	<!-- CSS -->
+	<link href="https://fonts.googleapis.com/css?family=Poppins:100,200,400,300,500,600,700" rel="stylesheet">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/linearicons.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/magnific-popup.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/nice-select.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/animate.min.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/owl.carousel.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+{% endblock %} 
+
+
+{% block script %}
+<script src="{{ url_for('static', filename='js/vendor/jquery-2.2.4.min.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+ crossorigin="anonymous"></script>
+<script src="{{ url_for('static', filename='js/vendor/bootstrap.min.js') }}"></script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhOdIF3Y9382fqJYt5I_sswSrEw5eihAA"></script>
+<script src="{{ url_for('static', filename='js/easing.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/hoverIntent.js') }}"></script>
+<script src="{{ url_for('static', filename='js/superfish.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery.ajaxchimp.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery.magnific-popup.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/owl.carousel.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery.nice-select.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/mail-script.js') }}"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script> 
+{% endblock %}
+
+{% block body %}
+<!-- start banner Area -->
+<section class="banner-area relative" id="home">
+	<div class="overlay overlay-bg"></div>
+	<div class="container">
+		<div class="row d-flex align-items-center justify-content-center">
+			<div class="about-content col-lg-12">
+				<h1 class="text-white">
+					Projects
+				</h1>
+				<p class="text-white link-nav">
+					<a href="index.html">Home </a>
+					<span class="lnr lnr-arrow-right"></span>
+					<a href="projects.html"> Projects</a>
+				</p>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- End banner Area -->
+
+<!-- Start gallery Area -->
+<section class="gallery-area section-gap">
+	<div class="container">
+		<div class="row d-flex justify-content-center">
+			<div class="col-md-12 pb-40 header-text text-center">
+				<h1 class="pb-10">Our Recent Works may impress you</h1>
+				<p>
+					Who are in extremely love with eco friendly system.
+				</p>
+			</div>
+		</div>
+		<div class="row">
+
+				{% for stone in json %}
+					<div class="col-lg-6">
+						<div class="single-gallery">
+							<div class="content">
+								<a href="#" target="_blank">
+									<div class="content-overlay"></div>
+									<img class="content-image img-fluid d-block mx-auto" src="/stone/photo/static/view/{{stone.stoneid}}" alt="" style="border-radius: 15px;">
+									<div class="content-details fadeIn-bottom">
+										<h3 class="content-title mx-auto">{{ stone.name }}</h3>
+										<a href="/stone/detail/{{stone.stoneid}}" class="primary-btn text-uppercase mt-20">More Details</a>
+									</div>
+								</a>
+							</div>
+						</div>
+					</div>
+				{%endfor%}
+				
+		</div>
+	</div>
+</section>
+<!-- End gallery Area -->
+
+<!-- Start brands Area -->
+<section class="brands-area pb-60 pt-60">
+	<div class="container no-padding">
+		<div class="brand-wrap">
+			<div class="row align-items-center active-brand-carusel justify-content-start no-gutters">
+				<div class="col single-brand">
+					<a href="#">
+						<img class="mx-auto" src="{{ url_for('static', filename='img/l1.png') }}" alt="">
+					</a>
+				</div>
+				<div class="col single-brand">
+					<a href="#">
+						<img class="mx-auto" src="{{ url_for('static', filename='img/l2.png') }}" alt="">
+					</a>
+				</div>
+				<div class="col single-brand">
+					<a href="#">
+						<img class="mx-auto" src="{{ url_for('static', filename='img/l3.png') }}" alt="">
+					</a>
+				</div>
+				<div class="col single-brand">
+					<a href="#">
+						<img class="mx-auto" src="{{ url_for('static', filename='img/l4.png') }}" alt="">
+					</a>
+				</div>
+				<div class="col single-brand">
+					<a href="#">
+						<img class="mx-auto" src="{{ url_for('static', filename='img/l5.png') }}" alt="">
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- End brands Area -->
+{% endblock %}

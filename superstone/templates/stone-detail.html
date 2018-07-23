@@ -1,0 +1,181 @@
+{% extends "template.html" %} {% block head %}
+
+<head>
+	<!-- Mobile Specific Meta -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<!-- Favicon-->
+	<!-- Author Meta -->
+	<meta name="author" content="colorlib">
+	<!-- Meta Description -->
+	<meta name="description" content="">
+	<!-- Meta Keyword -->
+	<meta name="keywords" content="">
+	<!-- meta character set -->
+	<meta charset="UTF-8">
+	<!-- Site Title -->
+	<title>Interior</title>
+	<!-- CSS -->
+	<link href="https://fonts.googleapis.com/css?family=Poppins:100,200,400,300,500,600,700" rel="stylesheet">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/linearicons.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/magnific-popup.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/nice-select.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/animate.min.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/owl.carousel.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+{% endblock %} 
+
+
+
+{% block script %}
+<script src="{{ url_for('static', filename='js/vendor/jquery-2.2.4.min.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+	crossorigin="anonymous"></script>
+<script src="{{ url_for('static', filename='js/vendor/bootstrap.min.js') }}"></script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhOdIF3Y9382fqJYt5I_sswSrEw5eihAA"></script>
+<script src="{{ url_for('static', filename='js/easing.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/hoverIntent.js') }}"></script>
+<script src="{{ url_for('static', filename='js/superfish.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery.ajaxchimp.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery.magnific-popup.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/owl.carousel.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery.nice-select.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/mail-script.js') }}"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+<script>
+	$(document).ready(function(){
+		$('.owl-carousel').owlCarousel({
+			margin:10,
+			responsive:{
+				0:{
+					items:1
+				},
+				600:{
+					items:1
+				},
+				1000:{
+					items:1
+				}
+			}
+		})
+	});
+</script>
+
+<style>
+	.owl-dot{
+
+	}
+</style>
+{% endblock %}
+
+{% block body %}
+<!-- start banner Area -->
+<section class="banner-area relative" id="home">
+	<div class="overlay overlay-bg"></div>
+	<div class="container">
+		<div class="row d-flex align-items-center justify-content-center">
+			<div class="about-content col-lg-12">
+				<h1 class="text-white">
+					Stone Details
+				</h1>
+				<p class="text-white link-nav">
+					<a href="/">Home </a>
+					<span class="lnr lnr-arrow-right"></span>
+					<a href="/details/{{ stoneid }}"> Stone Details</a>
+				</p>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- End banner Area -->
+
+<!-- Start project-details Area -->
+<section class="project-details-area section-gap">
+	<div class="container">
+		<div class="row align-items-center">
+			<div class="col-lg-6 project-details-left">
+				<div class="owl-carousel owl-theme testimonial-area">
+					{% for url in img_urls %}
+						<img src="{{ url }}" alt="" class="item">
+					{% endfor %}
+				</div>
+
+			</div>
+			<div class="col-lg-6 project-details-right">
+				<h3 class="pb-20"> {{ json.name }}</h3>
+				<p>
+					{{ json.sub_description }}
+				</p>
+				<div class="details-info d-flex flex-row">
+					<ul class="names">
+						<li>Rating : </li>
+						<li>Brand :</li>
+						<li>Status :</li>
+					</ul>
+					<ul class="desc">
+						<li>
+							<div class="star">
+								:
+								<span class="fa fa-star checked"></span>
+								<span class="fa fa-star checked"></span>
+								<span class="fa fa-star checked"></span>
+								<span class="fa fa-star checked"></span>
+								<span class="fa fa-star"></span>
+							</div>
+						</li>
+						<li>{{json.brand }}</li>
+						<li>{{json.status}}</li>
+					</ul>
+				</div>
+				<hr>
+				<div class="project-desc">
+					<p>
+						{{ json.detail_description }}
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- End project-details Area -->
+
+<!-- Start brands Area -->
+<section class="brands-area pb-60 pt-60">
+	<div class="container no-padding">
+		<div class="brand-wrap">
+			<div class="row align-items-center active-brand-carusel justify-content-start no-gutters">
+				<div class="col single-brand">
+					<a href="#">
+						<img class="mx-auto" src="{{ url_for('static', filename='img/l1.png') }}" alt="">
+					</a>
+				</div>
+				<div class="col single-brand">
+					<a href="#">
+						<img class="mx-auto" src="{{ url_for('static', filename='img/l2.png') }}" alt="">
+					</a>
+				</div>
+				<div class="col single-brand">
+					<a href="#">
+						<img class="mx-auto" src="{{ url_for('static', filename='img/l3.png') }}" alt="">
+					</a>
+				</div>
+				<div class="col single-brand">
+					<a href="#">
+						<img class="mx-auto" src="{{ url_for('static', filename='img/l4.png') }}" alt="">
+					</a>
+				</div>
+				<div class="col single-brand">
+					<a href="#">
+						<img class="mx-auto" src="{{ url_for('static', filename='img/l5.png') }}" alt="">
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- End brands Area -->
+
+{% endblock %}

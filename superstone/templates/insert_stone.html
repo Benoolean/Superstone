@@ -1,0 +1,141 @@
+{% extends "template.html" %}
+
+{% block head %}
+<head>
+	<!-- Mobile Specific Meta -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<!-- Favicon-->
+	<!-- Author Meta -->
+	<meta name="author" content="colorlib">
+	<!-- Meta Description -->
+	<meta name="description" content="">
+	<!-- Meta Keyword -->
+	<meta name="keywords" content="">
+	<!-- meta character set -->
+	<meta charset="UTF-8">
+	<!-- Site Title -->
+	<title>Interior</title>
+	<!-- CSS -->
+	<link href="https://fonts.googleapis.com/css?family=Poppins:100,200,400,300,500,600,700" rel="stylesheet">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/linearicons.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/magnific-popup.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/nice-select.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/animate.min.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/owl.carousel.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+{% endblock %}
+
+{% block body %}
+<!-- start banner Area -->
+<section class="banner-area relative" id="home">	
+	<div class="overlay overlay-bg"></div>
+	<div class="container">				
+		<div class="row d-flex align-items-center justify-content-center">
+			<div class="about-content col-lg-12">
+				<h1 class="text-white">
+					Contact Us				
+				</h1>	
+				<p class="text-white link-nav"><a href="index.html">Home </a>  <span class="lnr lnr-arrow-right"></span>  <a href="contact.html"> Contact Us</a></p>
+			</div>	
+		</div>
+	</div>
+</section>
+<!-- End banner Area -->				  
+
+<!-- Start contact-page Area -->
+<section class="contact-page-area section-gap">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-8">
+				<!--  
+				<form class="form-area " id="http://localhost:5000/test"  method=post  enctype=multipart/form-data novalidate>
+					<div class="row">	
+						<div class="col-lg-6 form-group">
+							
+							<label for="">Stone Name</label>
+							<input name="name" placeholder="Enter Stone Name" id="stonename" class="common-input mb-20 form-control" required="" type="text">
+							
+							<label for="">Sub-Description</label>
+							<input name="sub-description" placeholder="Enter Sub Description" class="common-input mb-20 form-control" required="" type="text">
+
+							<label for="">Price</label>
+							<input name="price" placeholder="100.00"  class="common-input mb-20 form-control" required="" type="number">
+						</div>
+						<div class="col-lg-6 form-group">
+							<label for="">Detail Description</label>
+							<textarea class="common-textarea form-control" name="detail-description" placeholder="Enter Detailed Description"></textarea>				
+							<input type = "file" name = "file" id='fileUpload'/>
+							<hr>
+								
+						</div>
+					</div>
+					<input type = "submit" class="genric-btn primary circle" style="float: left;"/>
+					<button id="test1" class="genric-btn primary circle" style="float: left;">Submit 2</button>
+				</form>	
+
+				{% if server_response %}
+					<div>
+						<h1>{{ server_response }}</h1>
+					</div>
+				{% endif %}
+				-->
+				<form method="POST" enctype="multipart/form-data" action="/admin/insert_stone" class="form-control" novalidate>
+					{{ form.csrf_token }}
+					{{ form.name.label }} {{ form.name(id="") }}
+					<br>
+					{{ form.sub_description.label }} {{ form.sub_description(id="") }}
+					<br>
+					{{ form.price.label }} {{ form.price(id="price", type="number") }}
+					<br>
+					{{ form.detail_description.label }} {{ form.detail_description(id="") }}
+					<br>
+					{{ form.photo.label }} {{ form.photo(id="", multiple="") }}
+					<br>
+					<input type="submit" value="Done" class="genric-btn primary circle">
+				</form>
+			</div>
+		</div>
+</section>
+
+<!-- End contact-page Area -->
+{% endblock %}
+
+
+{% block script %}
+<script src="{{ url_for('static', filename='js/vendor/jquery-2.2.4.min.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+	crossorigin="anonymous"></script>
+<script src="{{ url_for('static', filename='js/vendor/bootstrap.min.js') }}"></script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhOdIF3Y9382fqJYt5I_sswSrEw5eihAA"></script>
+<script src="{{ url_for('static', filename='js/easing.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/hoverIntent.js') }}"></script>
+<script src="{{ url_for('static', filename='js/superfish.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery.ajaxchimp.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery.magnific-popup.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/owl.carousel.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery.nice-select.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/mail-script.js') }}"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+<!-- 
+	<script>
+		$(document).ready(function() {
+			$.ajax({
+				url : "/getdata",
+				type : "GET",
+				dataType : "json",
+				cache : "false"
+			}).done(function (json) {
+				console.log(json)
+			}).fail(function(json) {
+				console.log(json)
+			})
+		})
+	</script>
+ -->
+
+
+{% endblock %}
+
