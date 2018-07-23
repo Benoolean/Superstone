@@ -5,6 +5,7 @@ from db_stone import db_stone
 
 import datetime, os
 
+#test
 app = Flask(__name__)
 
 app.config['TEMPLATES_AUTO_RELOAD'] = True
