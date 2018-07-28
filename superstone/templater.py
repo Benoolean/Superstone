@@ -83,7 +83,7 @@ def admin_login():
             print 'All the form fields are required.'
 
     return render_template('login.html', form=form)
-    
+
 
 @templater.route('/admin/insert_stone', methods=['POST', 'GET'])
 def contact_page():

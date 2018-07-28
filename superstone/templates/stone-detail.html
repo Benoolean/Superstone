@@ -24,6 +24,7 @@
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/animate.min.css') }}">
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/owl.carousel.css') }}">
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.fancybox.min.css') }}">
 </head>
 {% endblock %} 
 
@@ -42,7 +43,7 @@
 <script src="{{ url_for('static', filename='js/jquery.magnific-popup.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/owl.carousel.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/jquery.nice-select.min.js') }}"></script>
-<script src="{{ url_for('static', filename='js/mail-script.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery.fancybox.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 
 <script>
@@ -99,7 +100,11 @@
 			<div class="col-lg-6 project-details-left">
 				<div class="owl-carousel owl-theme testimonial-area">
 					{% for url in img_urls %}
-						<img src="{{ url }}" alt="" class="item">
+						<div class="container" style="max-height:300px">
+							<a data-fancybox="gallery" href="{{url}}">
+								<img src="{{ url }}" alt="" class="item">
+							</a>
+						</div>
 					{% endfor %}
 				</div>
 

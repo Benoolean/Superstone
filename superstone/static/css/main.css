@@ -3411,3 +3411,6 @@ body.mobile-nav-active #mobile-nav-toggle {
 .round-edge{
     border-radius: 15px;
 }
+.image-list-container{
+    height: 300px;
+}

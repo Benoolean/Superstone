@@ -107,8 +107,6 @@
     {% block body %}
     {% endblock %}
 
-    {% block script %}{% endblock %}
-
     <footer class="footer-area section-gap">
         <div class="container">
             <div class="row">
@@ -171,7 +169,7 @@
             </div>
         </div>
     </footer>
-
+    {% block script %}{% endblock %}
     <script>
         $(window).scroll(function () {
             $(".slideanim").each(function () {

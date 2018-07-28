@@ -43,7 +43,7 @@
 <script src="{{ url_for('static', filename='js/owl.carousel.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/jquery.nice-select.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/mail-script.js') }}"></script>
-<script src="{{ url_for('static', filename='js/main.js') }}"></script> 
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
 {% endblock %}
 
 {% block body %}
@@ -83,10 +83,10 @@
 				{% for stone in json %}
 					<div class="col-lg-6">
 						<div class="single-gallery">
-							<div class="content">
+							<div class="content round-edge image-list-container">
 								<a href="#" target="_blank">
 									<div class="content-overlay"></div>
-									<img class="content-image img-fluid d-block mx-auto" src="/stone/photo/static/view/{{stone.stoneid}}/1" alt="" style="border-radius: 15px;">
+									<img class="content-image img-fluid d-block mx-auto" src="/stone/photo/static/view/{{stone.stoneid}}/1" alt="">
 									<div class="content-details fadeIn-bottom">
 										<h3 class="content-title mx-auto">{{ stone.name }}</h3>
 										<a href="/stone/detail/{{stone.stoneid}}" class="primary-btn text-uppercase mt-20">More Details</a>
