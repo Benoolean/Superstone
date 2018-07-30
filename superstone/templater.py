@@ -12,6 +12,7 @@ import os
 import json
 import pymongo
 import gridfs
+import pandas as pd
 
 import db_stone
 import db_user
@@ -22,7 +23,7 @@ database = client.superstone
 
 templater = Blueprint('templater', __name__)
 
-ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'csv'])
 
 
 def allowed_file(filename):
@@ -31,12 +32,16 @@ def allowed_file(filename):
 
 
 class new_stone_form(FlaskForm):
+    series = StringField('Series', validators=[DataRequired()])
     name = StringField('Name', validators=[DataRequired()])
     sub_description = StringField('Sub Description', validators=[DataRequired()])
     price = DecimalField('Price', validators=[NumberRange(min=0)])
     detail_description = StringField('Description', validators=[DataRequired()])
+    csv = FileField('CSV Upload [OPTIONAL]')
     photo = FileField('Photo', validators=[FileRequired()])
 
+class csv_multi_image_form(FlaskForm):
+    photo = FileField('Photo', validators=[FileRequired()])
 
 class new_login_form(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
@@ -92,8 +97,30 @@ def contact_page():
 
     form = new_stone_form()
     if request.method == 'POST':
-        if form.validate():
+
+        csv_file = request.files['csv']
+        if csv_file != None:
+            df = pd.read_csv(request.files['csv'])
+            print df.loc[[1], ['test']].values[0][0]
+
+            form_list = []
+            for stone in range(0, df.count().test):
+                #return file upload per stone
+                form_csv = {
+                    'series' :  df.loc[[stone], ['test']].values[0][0],
+                    'name' :  df.loc[[stone], ['test1']].values[0][0],
+                    'form' : csv_multi_image_form()
+                }
+
+                #send the stone to the data base with imgcount of NONE. Update imgcount later with other form.
+                #didnt make it yet because the CSV file is off.
+                form_list.append(form_csv)
+
+            return render_template('insert_stone.html', form=form, csv_multi_list=form_list)
+
+        elif form.validate():
             query_insert = {
+                'series' : request.form['series'],
                 'name': request.form['name'],
                 'stoneid': db_stone.get_uuid(),
                 'sub_description': request.form['sub_description'],
@@ -108,7 +135,7 @@ def contact_page():
                 filename = secure_filename(photo.filename)
                 datafile = photo.read()
                 db_stone.insert_image(datafile, filename,
-                                      query_insert['stoneid'], img_count)
+                                        query_insert['stoneid'], img_count)
 
             query_insert['image_count'] = img_count
             db_stone.insert_one(query_insert)
@@ -119,7 +146,7 @@ def contact_page():
             datafile = file.read()
             db_stone.insert_image(datafile, filename, query_insert['stoneid'])
             db_stone.insert_one(query_insert)
-            '''
+                '''
         else:
             print 'All the form fields are required.'
 

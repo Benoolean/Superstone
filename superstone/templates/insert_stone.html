@@ -82,20 +82,52 @@
 					</div>
 				{% endif %}
 				-->
-				<form method="POST" enctype="multipart/form-data" action="/admin/insert_stone" class="form-control" novalidate>
-					{{ form.csrf_token }}
-					{{ form.name.label }} {{ form.name(id="") }}
-					<br>
-					{{ form.sub_description.label }} {{ form.sub_description(id="") }}
-					<br>
-					{{ form.price.label }} {{ form.price(id="price", type="number") }}
-					<br>
-					{{ form.detail_description.label }} {{ form.detail_description(id="") }}
-					<br>
-					{{ form.photo.label }} {{ form.photo(id="", multiple="") }}
-					<br>
-					<input type="submit" value="Done" class="genric-btn primary circle">
-				</form>
+				{% if csv_multi_list is defined%}
+					<form method="POST" enctype="multipart/form-data" action="/admin/insert_stone_csv" class="form-control" novalidate>
+						<h1>Upload Image for All Stones</h1>
+						<br>
+						{% for form_csv in csv_multi_list %}
+							{{ form_csv.form.csrf_token }}
+							Series: {{ form_csv.series}} 
+							<br>
+							Name: {{ form_csv.name}}
+							<br>
+							Sub description: {{ form_csv.name}}		
+							<br>
+							Price: {{ form_csv.name}}		
+							<br>
+							Description: {{ form_csv.name}}		
+							<br>	
+							Upload Photos: {{ form_csv.form.photo(multiple="") }}
+							<br><br>	
+							<input type="submit" value="Done" class="genric-btn primary circle">
+							<br><br>
+							
+						{% endfor %}
+					</form>	
+				{% else %}
+					<form method="POST" enctype="multipart/form-data" action="/admin/insert_stone" class="form-control" novalidate>
+							{{ form.csrf_token }}
+							<h1>Enter Stone In Here Manually</h1>
+							{{ form.series.label }} {{ form.series }}
+							<br>
+							{{ form.name.label }} {{ form.name(id="") }}
+							<br>
+							{{ form.sub_description.label }} {{ form.sub_description(id="") }}
+							<br>
+							{{ form.price.label }} {{ form.price(id="price", type="number") }}
+							<br>
+							{{ form.detail_description.label }} {{ form.detail_description(id="") }}
+							<br>
+							<h1>OR Upload CSV File</h1>
+							{{ form.csv.label }} {{ form.csv }}
+							<br>
+							<br>
+							{{ form.photo.label }} {{ form.photo(id="", multiple="") }}
+							<br>
+							<input type="submit" value="Done" class="genric-btn primary circle">
+					</form>
+				{% endif %}
 			</div>
 		</div>
 </section>
