@@ -167,28 +167,33 @@ def insert_stone_csv():
     if 'username' not in session:
         return redirect('/admin/login', code=302)
     
-    query_insert = {
-        'series' : request.form['series'],
-        'name': request.form['name'],
-        'stoneid': db_stone.get_uuid(),
-        'sub_description': request.form['sub_description'],
-        'price': request.form['price'],
-        'detail_description': request.form['detail_description'],
-    }
+    print csv_multi_image_form(request.form).validate()
 
-    img_count = 0
-    for photo in request.files.getlist('photo'):
-        img_count = img_count + 1
-        print photo
-        filename = secure_filename(photo.filename)
-        datafile = photo.read()
-        db_stone.insert_image(datafile, filename,
-                                query_insert['stoneid'], img_count)
+    if csv_multi_image_form(request.form).validate():
+        query_insert = {
+            'series' : request.form['series'],
+            'name': request.form['name'],
+            'stoneid': db_stone.get_uuid(),
+            'sub_description': request.form['sub_description'],
+            'price': request.form['price'],
+            'detail_description': request.form['detail_description'],
+        }
 
-    query_insert['image_count'] = img_count
-    db_stone.insert_one(query_insert)
+        img_count = 0
+        for photo in request.files.getlist('photo'):
+            img_count = img_count + 1
+            print photo
+            filename = secure_filename(photo.filename)
+            datafile = photo.read()
+            db_stone.insert_image(datafile, filename,
+                                    query_insert['stoneid'], img_count)
 
-    return jsonify({'status':'ok'})
+        query_insert['image_count'] = img_count
+        db_stone.insert_one(query_insert)
+        
+        return jsonify({'status':'ok'})
+    else:
+        print 'All the form fields are required'
 
 @templater.route('/products')
 def product_page():
