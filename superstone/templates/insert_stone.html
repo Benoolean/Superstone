@@ -88,15 +88,15 @@
 						<br>
 						{% for form_csv in csv_multi_list %}
 							{{ form_csv.form.csrf_token }}
-							Series: {{ form_csv.series}} 
+							{{ form_csv.form.series.label }} {{ form_csv.form.series(value=form_csv.series) }}
 							<br>
-							Name: {{ form_csv.name}}
+							{{ form_csv.form.name.label }} {{ form_csv.form.name(value=form_csv.name) }}
 							<br>
-							Sub description: {{ form_csv.name}}		
+							{{ form_csv.form.sub_description.label }} {{ form_csv.form.sub_description(value=form_csv.sub_description) }}
 							<br>
-							Price: {{ form_csv.name}}		
+							{{ form_csv.form.price.label }} {{ form_csv.form.price(value=form_csv.price) }}	
 							<br>
-							Description: {{ form_csv.name}}		
+							{{ form_csv.form.detail_description.label }} {{ form_csv.form.detail_description(value=form_csv.detail_description) }}	
 							<br>	
 							Upload Photos: {{ form_csv.form.photo(multiple="") }}
 							<br><br>	

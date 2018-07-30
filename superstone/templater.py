@@ -41,6 +41,11 @@ class new_stone_form(FlaskForm):
     photo = FileField('Photo', validators=[FileRequired()])
 
 class csv_multi_image_form(FlaskForm):
+    series = StringField('Series', validators=[DataRequired()])
+    name = StringField('Name', validators=[DataRequired()])
+    sub_description = StringField('Sub Description', validators=[DataRequired()])
+    price = DecimalField('Price', validators=[NumberRange(min=0)])
+    detail_description = StringField('Description', validators=[DataRequired()])
     photo = FileField('Photo', validators=[FileRequired()])
 
 class new_login_form(FlaskForm):
@@ -101,14 +106,17 @@ def contact_page():
         csv_file = request.files['csv']
         if csv_file != None:
             df = pd.read_csv(request.files['csv'])
-            print df.loc[[1], ['test']].values[0][0]
 
             form_list = []
-            for stone in range(0, df.count().test):
+            print df
+            for stone in range(0, df.count().series):
                 #return file upload per stone
                 form_csv = {
-                    'series' :  df.loc[[stone], ['test']].values[0][0],
-                    'name' :  df.loc[[stone], ['test1']].values[0][0],
+                    'series' :  df.loc[[stone], ['series']].values[0][0],
+                    'name' :  df.loc[[stone], ['name']].values[0][0],
+                    'sub_description' : df.loc[[stone], ['sub_description']].values[0][0],
+                    'price' : df.loc[[stone], ['price']].values[0][0],
+                    'detail_description' :df.loc[[stone], ['detail_description']].values[0][0],
                     'form' : csv_multi_image_form()
                 }
 
@@ -153,6 +161,34 @@ def contact_page():
 
     return render_template('insert_stone.html', form=form)
 
+
+@templater.route('/admin/insert_stone_csv', methods=['POST'])
+def insert_stone_csv():
+    if 'username' not in session:
+        return redirect('/admin/login', code=302)
+    
+    query_insert = {
+        'series' : request.form['series'],
+        'name': request.form['name'],
+        'stoneid': db_stone.get_uuid(),
+        'sub_description': request.form['sub_description'],
+        'price': request.form['price'],
+        'detail_description': request.form['detail_description'],
+    }
+
+    img_count = 0
+    for photo in request.files.getlist('photo'):
+        img_count = img_count + 1
+        print photo
+        filename = secure_filename(photo.filename)
+        datafile = photo.read()
+        db_stone.insert_image(datafile, filename,
+                                query_insert['stoneid'], img_count)
+
+    query_insert['image_count'] = img_count
+    db_stone.insert_one(query_insert)
+
+    return jsonify({'status':'ok'})
 
 @templater.route('/products')
 def product_page():
