@@ -114,6 +114,7 @@ def contact_page():
 
                 #send the stone to the data base with imgcount of NONE. Update imgcount later with other form.
                 #didnt make it yet because the CSV file is off.
+                #working on the csv-support branch
                 form_list.append(form_csv)
 
             return render_template('insert_stone.html', form=form, csv_multi_list=form_list)
