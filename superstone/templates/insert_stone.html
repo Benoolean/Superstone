@@ -14,7 +14,7 @@
 	<!-- meta character set -->
 	<meta charset="UTF-8">
 	<!-- Site Title -->
-	<title>Interior</title>
+	<title>Super Stone</title>
 	<!-- CSS -->
 	<link href="https://fonts.googleapis.com/css?family=Poppins:100,200,400,300,500,600,700" rel="stylesheet">
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/linearicons.css') }}">
@@ -50,82 +50,58 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-8">
-				<!--  
-				<form class="form-area " id="http://localhost:5000/test"  method=post  enctype=multipart/form-data novalidate>
-					<div class="row">	
-						<div class="col-lg-6 form-group">
-							
-							<label for="">Stone Name</label>
-							<input name="name" placeholder="Enter Stone Name" id="stonename" class="common-input mb-20 form-control" required="" type="text">
-							
-							<label for="">Sub-Description</label>
-							<input name="sub-description" placeholder="Enter Sub Description" class="common-input mb-20 form-control" required="" type="text">
-
-							<label for="">Price</label>
-							<input name="price" placeholder="100.00"  class="common-input mb-20 form-control" required="" type="number">
-						</div>
-						<div class="col-lg-6 form-group">
-							<label for="">Detail Description</label>
-							<textarea class="common-textarea form-control" name="detail-description" placeholder="Enter Detailed Description"></textarea>				
-							<input type = "file" name = "file" id='fileUpload'/>
-							<hr>
-								
-						</div>
-					</div>
-					<input type = "submit" class="genric-btn primary circle" style="float: left;"/>
-					<button id="test1" class="genric-btn primary circle" style="float: left;">Submit 2</button>
-				</form>	
-
-				{% if server_response %}
-					<div>
-						<h1>{{ server_response }}</h1>
-					</div>
-				{% endif %}
-				-->
-				{% if csv_multi_list is defined%}
+				{% if new_csv_upload_form is defined %}
 					<form method="POST" enctype="multipart/form-data" action="/admin/insert_stone_csv" class="form-control" novalidate>
-						<h1>Upload Image for All Stones</h1>
+						{{ new_csv_upload_form.csrf_token }}
+						{{ new_csv_upload_form.csv.label }} : {{ new_csv_upload_form.csv }}
 						<br>
-						{% for form_csv in csv_multi_list %}
-							{{ form_csv.form.csrf_token }}
-							Series: {{ form_csv.series}} 
-							<br>
-							Name: {{ form_csv.name}}
-							<br>
-							Sub description: {{ form_csv.name}}		
-							<br>
-							Price: {{ form_csv.name}}		
-							<br>
-							Description: {{ form_csv.name}}		
-							<br>	
-							Upload Photos: {{ form_csv.form.photo(multiple="") }}
-							<br><br>	
-							<input type="submit" value="Done" class="genric-btn primary circle">
-							<br><br>
-							
-						{% endfor %}
+						<input type="submit" value="Done" class="genric-btn primary circle">
+					</form>
+				{% endif %}
+				{% if new_csv_multi_edit_form is defined %}
+					<h1>Upload Image for All Stones</h1>
+					<p>Edit Anything That is Incorrect</p>
+					<hr>
+					<br>
+					{% for form_csv in new_csv_multi_edit_form %}
+					<form method="POST" enctype="multipart/form-data" action="/admin/insert_stone_csv/confirm" class="form-control" target='_blank' novalidate style='margin-bottom:15px; padding-top:15px; padding-bottom:15px'> 
+						{{ form_csv.form.csrf_token }}
+						Series: {{ form_csv.form.series(value=form_csv.series)}} 
+						<br>
+						Name: {{ form_csv.form.name(value=form_csv.name)}} 
+						<br>
+						Sub description: {{ form_csv.form.sub_description(value=form_csv.sub_description)}} 
+						<br>
+						Price: {{ form_csv.form.price(type='number',value=form_csv.price)}} 	
+						<br>
+						Description: {{ form_csv.form.detail_description(value=form_csv.detail_description)}} 	
+						<br>	
+						Upload Photos: {{ form_csv.form.photo(multiple="") }}
+						<br><br>	
+						<input type="submit" value="Done" onclick='hide_parent.call(this)' class="genric-btn primary circle">
 					</form>	
-				{% else %}
+					{% endfor %}
+				{% endif %}
+
+				{% if new_stone_form is defined %}
 					<form method="POST" enctype="multipart/form-data" action="/admin/insert_stone" class="form-control" novalidate>
-							{{ form.csrf_token }}
+							{{ new_stone_form.csrf_token }}
 							<h1>Enter Stone In Here Manually</h1>
-							{{ form.series.label }} {{ form.series }}
+							{{ new_stone_form.series.label }} {{ new_stone_form.series }}
 							<br>
-							{{ form.name.label }} {{ form.name(id="") }}
+							{{ new_stone_form.name.label }} {{ new_stone_form.name(id="") }}
 							<br>
-							{{ form.sub_description.label }} {{ form.sub_description(id="") }}
+							{{ new_stone_form.sub_description.label }} {{ new_stone_form.sub_description(id="") }}
 							<br>
-							{{ form.price.label }} {{ form.price(id="price", type="number") }}
+							{{ new_stone_form.price.label }} {{ new_stone_form.price(id="price", type="number") }}
 							<br>
-							{{ form.detail_description.label }} {{ form.detail_description(id="") }}
+							{{ new_stone_form.detail_description.label }} {{ new_stone_form.detail_description(id="") }}
 							<br>
-							<h1>OR Upload CSV File</h1>
-							{{ form.csv.label }} {{ form.csv }}
-							<br>
-							<br>
-							{{ form.photo.label }} {{ form.photo(id="", multiple="") }}
+							{{ new_stone_form.photo.label }} {{ new_stone_form.photo(id="", multiple="") }}
 							<br>
 							<input type="submit" value="Done" class="genric-btn primary circle">
+
+							<p>Got a CSV file? Click <a href="/admin/insert_stone_csv">here</a>.</p>
 					</form>
 				{% endif %}
 			</div>
@@ -151,22 +127,12 @@
 <script src="{{ url_for('static', filename='js/jquery.nice-select.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/mail-script.js') }}"></script>
 <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-<!-- 
-	<script>
-		$(document).ready(function() {
-			$.ajax({
-				url : "/getdata",
-				type : "GET",
-				dataType : "json",
-				cache : "false"
-			}).done(function (json) {
-				console.log(json)
-			}).fail(function(json) {
-				console.log(json)
-			})
-		})
-	</script>
- -->
+
+<script>
+	var hide_parent = function() {
+		$(this).parent().hide()
+	}
+</script>
 
 
 {% endblock %}

@@ -1,7 +1,7 @@
 from flask import Flask, Blueprint, render_template, request, jsonify, Response, session, redirect, url_for, flash
 from flask_wtf import FlaskForm
 from wtforms import StringField, DecimalField
-from flask_wtf.file import FileField, FileRequired
+from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms.validators import DataRequired, NumberRange
 
 from werkzeug.datastructures import ImmutableDict
@@ -14,21 +14,13 @@ import pymongo
 import gridfs
 import pandas as pd
 
-import db_stone
-import db_user
+import dbhandler
 import main
 
 client = MongoClient('localhost', 27017)
 database = client.superstone
 
 templater = Blueprint('templater', __name__)
-
-ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'csv'])
-
-
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 class new_stone_form(FlaskForm):
@@ -37,11 +29,21 @@ class new_stone_form(FlaskForm):
     sub_description = StringField('Sub Description', validators=[DataRequired()])
     price = DecimalField('Price', validators=[NumberRange(min=0)])
     detail_description = StringField('Description', validators=[DataRequired()])
-    csv = FileField('CSV Upload [OPTIONAL]')
-    photo = FileField('Photo', validators=[FileRequired()])
+    photo = FileField('Photo', validators=[FileRequired(), FileAllowed(['png', 'jpg', 'jpeg', 'gif'], 'Images only!')])
 
-class csv_multi_image_form(FlaskForm):
-    photo = FileField('Photo', validators=[FileRequired()])
+
+class new_csv_upload_form(FlaskForm):
+    csv = FileField('CSV', validators=[FileRequired(), FileAllowed(['csv'], 'CSV only!')])
+
+
+class new_csv_multi_edit_form(FlaskForm):
+    series = StringField('Series', validators=[DataRequired()])
+    name = StringField('Name', validators=[DataRequired()])
+    sub_description = StringField('Sub Description', validators=[DataRequired()])
+    price = DecimalField('Price', validators=[NumberRange(min=0)])
+    detail_description = StringField('Description', validators=[DataRequired()])
+    photo = FileField('Photo', validators=[FileAllowed(['png', 'jpg', 'jpeg', 'gif'], 'Images only!')])
+
 
 class new_login_form(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
@@ -58,105 +60,35 @@ def main_page():
     return render_template('index.html')
 
 
-@templater.route('/admin/login', methods=['POST', 'GET'])
-def admin_login():
+@templater.route('/admin/login', methods=['GET'])
+def admin_login_page():
     if 'username' in session:
         return redirect('/admin/insert_stone', code=302)
-
-    form = new_login_form()
-    if request.method == 'POST':
-        if form.validate():
-            query_check = {
-                'username': request.form['username'],
-                'password': request.form['password']
-            }
-
-            result = db_user.find_one({'username': query_check['username']})
-            if result == None:
-                return render_template('login.html', form=form, error='Username or password is invalid')
-
-            if result['password'] == query_check['password']:
-                print 'Password is correct'
-                session.permanent = True
-                session['username'] = query_check['username']
-                return redirect('/admin/insert_stone', code=302)
-
-            else:
-                print 'Wrong password'
-                return render_template('login.html', form=form, error='Username or password is invalid')
-        else:
-            print 'All the form fields are required.'
-
-    return render_template('login.html', form=form)
+    return render_template('login.html', new_login_form=new_login_form())
 
 
-@templater.route('/admin/insert_stone', methods=['POST', 'GET'])
-def contact_page():
+@templater.route('/admin/insert_stone', methods=['GET'])
+def insert_stone_page():
     if 'username' not in session:
         return redirect('/admin/login', code=302)
-
-    form = new_stone_form()
-    if request.method == 'POST':
-
-        csv_file = request.files['csv']
-        if csv_file != None:
-            df = pd.read_csv(request.files['csv'])
-            print df.loc[[1], ['test']].values[0][0]
-
-            form_list = []
-            for stone in range(0, df.count().test):
-                #return file upload per stone
-                form_csv = {
-                    'series' :  df.loc[[stone], ['test']].values[0][0],
-                    'name' :  df.loc[[stone], ['test1']].values[0][0],
-                    'form' : csv_multi_image_form()
-                }
-
-                #send the stone to the data base with imgcount of NONE. Update imgcount later with other form.
-                #didnt make it yet because the CSV file is off.
-                form_list.append(form_csv)
-
-            return render_template('insert_stone.html', form=form, csv_multi_list=form_list)
-
-        elif form.validate():
-            query_insert = {
-                'series' : request.form['series'],
-                'name': request.form['name'],
-                'stoneid': db_stone.get_uuid(),
-                'sub_description': request.form['sub_description'],
-                'price': request.form['price'],
-                'detail_description': request.form['detail_description'],
-            }
-
-            img_count = 0
-            for photo in request.files.getlist('photo'):
-                img_count = img_count + 1
-                print photo
-                filename = secure_filename(photo.filename)
-                datafile = photo.read()
-                db_stone.insert_image(datafile, filename,
-                                        query_insert['stoneid'], img_count)
-
-            query_insert['image_count'] = img_count
-            db_stone.insert_one(query_insert)
-            '''
-            file = request.files['photo']
-            filename = secure_filename(file.filename)
-            
-            datafile = file.read()
-            db_stone.insert_image(datafile, filename, query_insert['stoneid'])
-            db_stone.insert_one(query_insert)
-                '''
-        else:
-            print 'All the form fields are required.'
-
-    return render_template('insert_stone.html', form=form)
+    return render_template('insert_stone.html', new_stone_form=new_stone_form())
 
 
-@templater.route('/products')
+@templater.route('/admin/insert_stone_csv', methods=['GET'])
+def insert_stone_csv_page():
+    if 'username' not in session:
+        return redirect('/admin/login', code=302)
+    return render_template('insert_stone.html', new_csv_upload_form=new_csv_upload_form())
+
+
+@templater.route('/products', methods=['GET'])
 def product_page():
-    return render_template('projects.html')
+    return redirect('/stone/list', code=302)
 
+
+@templater.route('/about', methods=['GET'])
+def about_page():
+    return render_template('about.html')
 
 '''
 End of Template Render
@@ -177,7 +109,7 @@ GET Method
 
 @templater.route('/stone/detail/<stoneid>', methods=['GET'])
 def stone_details(stoneid):
-    query_return = db_stone.find_one({'stoneid': str(stoneid)})
+    query_return = dbhandler.find_one('stone', {'stoneid': str(stoneid)})
     if query_return == None:
         return redirect('http://www.google.com', code=302)
 
@@ -194,7 +126,7 @@ def stone_details(stoneid):
 
 @templater.route('/stone/list', methods=['GET'])
 def stone_list():
-    query_return = db_stone.find_many({})  # returns everything
+    query_return = dbhandler.find_many('stone', {})  # returns everything
     if query_return == None:
         return redirect("http://www.google.com", code=302)
 
@@ -205,8 +137,7 @@ def stone_list():
 def stone_photo(linkid, count):
     fs = gridfs.GridFS(database)
 
-    query_return = db_stone.find_one_image(
-        {'linkid': linkid, 'img_count': int(count)})
+    query_return = dbhandler.find_one_image({'linkid': linkid, 'img_count': int(count)})
     if query_return == None:
         return redirect('http://www.google.com', code=302)
 

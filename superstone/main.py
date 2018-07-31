@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, jsonify, Response, session, redirect
 from datetime import timedelta
 from templater import templater
-from db_stone import db_stone
+from dbhandler import dbhandler
 
 import datetime, os
 
@@ -13,7 +13,7 @@ app.config['UPLOAD_FOLDER'] = 'upload/'
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 
 app.register_blueprint(templater)
-app.register_blueprint(db_stone)
+app.register_blueprint(dbhandler)
 
 app.secret_key= 'secretpassword'
 app.permanent_session_lifetime = timedelta(minutes=5)

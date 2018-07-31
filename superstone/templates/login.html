@@ -30,10 +30,10 @@
 
 {% block body %}
     <form method="POST" enctype="multipart/form-data" action="/admin/login" class="form-control" novalidate>
-        {{ form.csrf_token }}
-        {{form.username.label}} {{form.username}}
+        {{ new_login_form.csrf_token }}
+        {{new_login_form.username.label}} {{new_login_form.username}}
         <br>
-        {{form.password.label}} {{form.password(type="password") }}
+        {{new_login_form.password.label}} {{new_login_form.password(type="password") }}
         <br>
         <input type="submit" value="Done" class="genric-btn primary circle">
     </form>
